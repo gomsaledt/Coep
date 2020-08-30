@@ -1,0 +1,66 @@
+c program
+----------------
+
+#include<stdio.h>
+int Z;
+
+void main()
+{
+        int a, b, c;
+        int p = 6;
+        int q;
+        double r;
+
+        a = 10;
+        b = 20;
+        c = a * b + 25;
+        p = 6;
+        q = Z;
+        r = 34.5;
+        Z = r;
+        Z = Z + 1;
+}
+
+
+gimple output
+----------------------
+
+main ()
+{
+  int a;
+  int b;
+  int c;
+  int p;
+  int q;
+  double r;
+
+  p = 6;
+  a = 10;
+  b = 20;
+  _1 = a * b;
+  c = _1 + 25;
+  p = 6;
+  q = Z;
+  r = 3.45e+1;
+  _2 = (int) r;
+  Z = _2;
+  Z.0_3 = Z;
+  _4 = Z.0_3 + 1;
+  Z = _4;
+}
+
+
+Solutions
+----------------
+				1	Each declaration is displayed on  seperate  line as  an independent local variable  declaration.
+					  For multiple variables declared and initialized on the same line the declaration is on the seperate line  and initialization is on seperate line.
+					  There is no declaration for global variable (int Z); they are used directly.
+					  
+				2	A GIMPLE  statement can have  at most one operation.  Any expression containing  more than  one  operation is  broken  up by  introducing temporaries.
+					  It  is  easy  to   convert  C  expressions  to  GIMPLE statements by considering abstract syntax trees, where each non-leaf node  must  correspond  to  either a  local  or  temporary  variable storage. 
+					  
+				3	Any double/float are displayed in scientific notation i.e. in powers of 10 by using e followed by power of 10.
+					  If float/ double are assigned to integer then implicit type conversion takes place in GIMPLE.
+					  
+				4	Reading/writing  from/to global  variables  requires  a memory  load or  store operation.  As  GIMPLE  statements can  have  at most  one operation, the only type of  statements involving globals are of the form "GLOBAL  = LOCAL" or  "LOCAL =  GLOBAL". This is  because while local variables  of a  procedure can  reside entirely  in registers,
+					  every read/write  to global variables  must refer to main  memory as they can be accessed by  other entities (threads, I/O devices, etc).Hence,  any operation  on global  variables (such  as the  increment shown  in this  example)  has  to go  through  an  indirection of  a temporary version of the global  inside registers (as this temporary value is  not visible to  I/O devices, etc). Global  temporaries are named similar to the global variable but with a numeric suffix.
