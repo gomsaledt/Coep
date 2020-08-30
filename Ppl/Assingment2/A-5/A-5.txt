@@ -1,0 +1,25 @@
+A-5.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <main>:
+main():
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	c7 45 f8 0a 00 00 00 	movl   $0xa,-0x8(%rbp)
+   b:	8b 45 fc             	mov    -0x4(%rbp),%eax
+   e:	3b 45 f8             	cmp    -0x8(%rbp),%eax
+  11:	7e 10                	jle    23 <main+0x23>
+  13:	c7 45 f0 03 00 00 00 	movl   $0x3,-0x10(%rbp)
+  1a:	c7 45 f4 02 00 00 00 	movl   $0x2,-0xc(%rbp)
+  21:	eb 0e                	jmp    31 <main+0x31>
+  23:	c7 45 f0 02 00 00 00 	movl   $0x2,-0x10(%rbp)
+  2a:	c7 45 f4 03 00 00 00 	movl   $0x3,-0xc(%rbp)
+  31:	8b 55 f0             	mov    -0x10(%rbp),%edx
+  34:	8b 45 f4             	mov    -0xc(%rbp),%eax
+  37:	01 d0                	add    %edx,%eax
+  39:	89 45 fc             	mov    %eax,-0x4(%rbp)
+  3c:	b8 00 00 00 00       	mov    $0x0,%eax
+  41:	5d                   	pop    %rbp
+  42:	c3                   	retq  
