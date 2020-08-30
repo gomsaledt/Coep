@@ -1,0 +1,42 @@
+A-4.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <main>:
+main():
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 83 ec 30          	sub    $0x30,%rsp
+   8:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+   f:	00 00 
+  11:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+  15:	31 c0                	xor    %eax,%eax
+  17:	c7 45 ec 01 00 00 00 	movl   $0x1,-0x14(%rbp)
+  1e:	c7 45 f0 02 00 00 00 	movl   $0x2,-0x10(%rbp)
+  25:	c7 45 f4 03 00 00 00 	movl   $0x3,-0xc(%rbp)
+  2c:	c7 45 d4 00 00 00 00 	movl   $0x0,-0x2c(%rbp)
+  33:	eb 16                	jmp    4b <main+0x4b>
+  35:	8b 45 d4             	mov    -0x2c(%rbp),%eax
+  38:	48 98                	cltq   
+  3a:	8b 54 85 ec          	mov    -0x14(%rbp,%rax,4),%edx
+  3e:	8b 45 d4             	mov    -0x2c(%rbp),%eax
+  41:	48 98                	cltq   
+  43:	89 54 85 e0          	mov    %edx,-0x20(%rbp,%rax,4)
+  47:	83 45 d4 01          	addl   $0x1,-0x2c(%rbp)
+  4b:	83 7d d4 02          	cmpl   $0x2,-0x2c(%rbp)
+  4f:	7e e4                	jle    35 <main+0x35>
+  51:	48 8d 45 e0          	lea    -0x20(%rbp),%rax
+  55:	48 89 45 d8          	mov    %rax,-0x28(%rbp)
+  59:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
+  5d:	48 83 c0 08          	add    $0x8,%rax
+  61:	c7 00 05 00 00 00    	movl   $0x5,(%rax)
+  67:	b8 00 00 00 00       	mov    $0x0,%eax
+  6c:	48 8b 4d f8          	mov    -0x8(%rbp),%rcx
+  70:	64 48 33 0c 25 28 00 	xor    %fs:0x28,%rcx
+  77:	00 00 
+  79:	74 05                	je     80 <main+0x80>
+  7b:	e8 00 00 00 00       	callq  80 <main+0x80>
+			7c: R_X86_64_PLT32	__stack_chk_fail-0x4
+  80:	c9                   	leaveq 
+  81:	c3                   	retq 
