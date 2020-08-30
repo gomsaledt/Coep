@@ -1,0 +1,109 @@
+C Program
+-----------------
+#include<stdio.h>
+int Z;
+
+void f()
+{
+        int a, b, c;
+        a = Z;
+        if (a < 10) {
+                b = 5;
+                c = 17;
+        } else {
+                b = 6;
+                c = 20;
+                if (a == 0) {
+                        c = 0;
+                }
+        }
+        Z = b * 10 + c;
+}
+
+
+GIMPLE OUTPUT
+---------------------------
+f ()
+{
+  int a;
+  int b;
+  int c;
+
+  a = Z;
+  if (a <= 9) goto <D.2254>; else goto <D.2255>;
+  <D.2254>:
+  b = 5;
+  c = 17;
+  goto <D.2256>;
+  <D.2255>:
+  b = 6;
+  c = 20;
+  if (a == 0) goto <D.2257>; else goto <D.2258>;
+  <D.2257>:
+  c = 0;
+  <D.2258>:
+  <D.2256>:
+  _1 = b * 10;
+  _2 = c + _1;
+  Z = _2;
+}
+
+
+Solutions
+---------------
+				1	If-blocks have been broken down  into distinct sections of code with labels  (named similar  to  temporary  variables). Control  transfer occurs with unconditional jumps (e.g. "goto X") or conditional jumps (e.g. "if Z then goto X else goto Y").
+				
+				2	The control-flow  graph dump shows  distinct basic blocks  which are named sequentially starting from  1. Basic blocks roughly correspond to  labels that  are created  during the  gimplification of  control statements.
+
+
+CFG dump Output
+----------------------------
+;; Function f (f, funcdef_no=0, decl_uid=2248, cgraph_uid=0, symbol_order=1)
+
+;; 1 loops found
+;;
+;; Loop 0
+;;  header 0, latch 1
+;;  depth 0, outer -1
+;;  nodes: 0 1 2 3 4 5 6
+;; 2 succs { 3 4 }
+;; 3 succs { 6 }
+;; 4 succs { 5 6 }
+;; 5 succs { 6 }
+;; 6 succs { 1 }
+f ()
+{
+  int c;
+  int b;
+  int a;
+
+  <bb 2> [0.00%]:
+  a = Z;
+  if (a <= 9)
+    goto <bb 3>; [0.00%]
+  else
+    goto <bb 4>; [0.00%]
+
+  <bb 3> [0.00%]:
+  b = 5;
+  c = 17;
+  goto <bb 6>; [0.00%]
+
+  <bb 4> [0.00%]:
+  b = 6;
+  c = 20;
+  if (a == 0)
+    goto <bb 5>; [0.00%]
+  else
+    goto <bb 6>; [0.00%]
+
+  <bb 5> [0.00%]:
+  c = 0;
+
+  <bb 6> [0.00%]:
+  _1 = b * 10;
+  _2 = c + _1;
+  Z = _2;
+  return;
+
+}
