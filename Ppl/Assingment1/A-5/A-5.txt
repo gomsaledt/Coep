@@ -1,0 +1,150 @@
+C program
+-----------------
+int main()
+{
+    int a, b, c, d;
+
+    d = 10;
+    if (c > d) {
+        a = 3;
+        b = 2;
+    } else {
+        a = 2;
+        b = 3;
+    }
+
+    c = a + b;
+}
+
+
+CFG dump Output
+-----------------------------
+;; Function main (main, funcdef_no=0, decl_uid=1792, cgraph_uid=0, symbol_order=0)
+
+;; 1 loops found
+;;
+;; Loop 0
+;;  header 0, latch 1
+;;  depth 0, outer -1
+;;  nodes: 0 1 2 3 4 5 6
+;; 2 succs { 3 4 }
+;; 3 succs { 5 }
+;; 4 succs { 5 }
+;; 5 succs { 6 }
+;; 6 succs { 1 }
+main ()
+{
+  int d;
+  int c;
+  int b;
+  int a;
+  int D.1802;
+
+  <bb 2> [0.00%]:
+  d = 10;
+  if (c > d)
+    goto <bb 3>; [0.00%]
+  else
+    goto <bb 4>; [0.00%]
+
+  <bb 3> [0.00%]:
+  a = 3;
+  b = 2;
+  goto <bb 5>; [0.00%]
+
+  <bb 4> [0.00%]:
+  a = 2;
+  b = 3;
+
+  <bb 5> [0.00%]:
+  c = a + b;
+  D.1802 = 0;
+
+<L3> [0.00%]:
+  return D.1802;
+
+}
+
+
+
+SSA output
+-------------------
+;; Function main (main, funcdef_no=0, decl_uid=1792, cgraph_uid=0, symbol_order=0)
+
+main ()
+{
+  int d;
+  int c;
+  int b;
+  int a;
+  int D.1802;
+  int _10;
+
+  <bb 2> [0.00%]:
+  d_3 = 10;
+  if (c_4(D) > d_3)
+    goto <bb 3>; [0.00%]
+  else
+    goto <bb 4>; [0.00%]
+
+  <bb 3> [0.00%]:
+  a_7 = 3;
+  b_8 = 2;
+  goto <bb 5>; [0.00%]
+
+  <bb 4> [0.00%]:
+  a_5 = 2;
+  b_6 = 3;
+
+  <bb 5> [0.00%]:
+  # a_1 = PHI <a_7(3), a_5(4)>
+  # b_2 = PHI <b_8(3), b_6(4)>
+  c_9 = a_1 + b_2;
+  _10 = 0;
+
+<L3> [0.00%]:
+  return _10;
+
+}
+
+
+Solutions
+---------------
+				1	Local variables are  suffixed with a unique  number which represents the assignment. For  example, 'd_3' refers to the  usage of variable 'd'  and  the  only  assignment  which reaches  this  point  is  the assignment 'd_3'.  Variables that are  likely to be used  before any assignment are suffixed  with '(D)' to indicate  that the assignment was implicit in the declaration.  This happens to both uninitialized local variables and formal parameters.  For example, variable 'c' is used as 'c_4(D)' in the 'if' condition.
+				
+				2	A PHI node merges assignments from different paths and creates a new assignment. For example:
+					 # a_1 = PHI <a_5(3), a_7(4)>
+					 
+					 indicates that if  the control reaches here from basic  block 3 then use the  value of a_5;  otherwise if  the control reaches  here from basic block 4 then use the value of a_7.
+				
+				3	 A switch statement can result in a merge of more than two paths (and hence possibly more than two assignments). Consider:
+
+            int main()
+            {
+                int a, b;
+                switch (a){
+                	case 1:
+                        b = 2;
+                        break;
+                    case 2:
+                        b = 3;
+                        break;
+                    case 3:
+                        b = 4;
+                    case 4:
+                        b = 5;
+                        break;
+                    case 5:
+                    case 6:
+                        b = 6;
+                        break;
+                    default:
+                        b = 7;
+                }
+                return b;
+            }
+            
+            			In this case  the PHI node at  the end of the  switch statement will merge multiple assignments such as:
+
+            # b_1 = PHI <b_4(3), b_5(4), b_7(6), b_8(7), b_9(8)>
+
