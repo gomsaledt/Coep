@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1612714984 source:c:\users\91866\desktop\py\fun\bst_using_arr\bst.c
+	<stdlib.h>
+	<stdio.h>
+	"bst.h"
+
+1612714948 c:\users\91866\desktop\py\fun\bst_using_arr\bst.h
+
+1612714961 source:c:\users\91866\desktop\py\fun\bst_using_arr\main.c
+	<stdio.h>
+	"bst.h"
+

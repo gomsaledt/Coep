@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1612719124 source:c:\users\91866\desktop\c\dsa-2\ass2\postorder_bst\main.c
+	<stdio.h>
+	"bst.h"
+
+1612719528 source:c:\users\91866\desktop\c\dsa-2\ass2\postorder_bst\bst.c
+	<stdio.h>
+	<stdlib.h>
+	"bst.h"
+
+1612719530 c:\users\91866\desktop\c\dsa-2\ass2\postorder_bst\bst.h
+
